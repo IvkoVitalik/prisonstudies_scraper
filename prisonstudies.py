@@ -8,15 +8,17 @@ def prisonA(my_html):
 			yield link.get('href')
 			
 def prisonDiv(my_html):
-	for div in est_html.find_all('div'):
+	for div in my_html.find_all('div'):
 		if div.get('class') and "field-collection-item-field-number-of-establishments" in div.get('class'):
-			return div.div.div.div.text
+                        divs = div.findChildren()
+                        return divs[2].text
 			
 #continent_list = (prison(prison_html,'/map/'))
 country_list = (prisonA(prison_html))
 result_dict = {}
 for i in country_list:
 	country = i.split('/')[2]
+	print(country + " is(are) processing...")
 	country_r = requests.get('http://www.prisonstudies.org'+i)
 	est_html = BeautifulSoup(country_r.text, 'html.parser')
 	est_num = prisonDiv(est_html).replace('\n',"")
